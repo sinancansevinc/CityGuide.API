@@ -34,6 +34,14 @@ namespace CityGuide.API
 		{
 			var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings").GetSection("Token").Value);
 
+			services.AddCors(options =>
+			{
+				options.AddPolicy("AllowAll",
+					p => p.AllowAnyOrigin()
+						.AllowAnyHeader()
+						.AllowAnyMethod());
+			});
+
 			services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
 			services.AddDbContext<DataContext>(options =>
@@ -73,6 +81,8 @@ namespace CityGuide.API
 			{
 				app.UseDeveloperExceptionPage();
 			}
+
+			app.UseCors("AllowAll");
 
 			app.UseHttpsRedirection();
 
